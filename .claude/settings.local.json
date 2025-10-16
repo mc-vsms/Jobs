@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//k/dev/minecraft/folia-plugins/PaperPlugin-Template/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

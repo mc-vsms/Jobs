@@ -6,4 +6,8 @@
 src/main/resources/locale/messages_en.yml
 .classpath
 .project
+
+# Gradle
 /build/
+/.gradle/
+!gradle-wrapper.jar
