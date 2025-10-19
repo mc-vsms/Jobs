@@ -148,6 +148,7 @@ public final class Jobs extends JavaPlugin {
     private static BossBarManager bbManager;
     private static ShopManager shopManager;
     private static Loging loging;
+    private static com.gamingmesh.jobs.enchantments.CustomEnchantmentManager enchantmentManager;
     @Deprecated
     private static BlockProtectionManager bpManager;
     private static ExploitProtectionManager exploitManager;
@@ -328,6 +329,10 @@ public final class Jobs extends JavaPlugin {
             shopManager = new ShopManager();
         }
         return shopManager;
+    }
+
+    public static com.gamingmesh.jobs.enchantments.CustomEnchantmentManager getEnchantmentManager() {
+        return enchantmentManager;
     }
 
     public static ConfigManager getConfigManager() {
@@ -808,6 +813,10 @@ public final class Jobs extends JavaPlugin {
             JobsHook.loadHooks();
             registerListeners();
 
+            // Initialize custom enchantment system
+            enchantmentManager = new com.gamingmesh.jobs.enchantments.CustomEnchantmentManager(this);
+            enchantmentManager.enable();
+
             complement = new Complement1();
 
             if (HookVault.isVaultEnable()) {
@@ -873,6 +882,16 @@ public final class Jobs extends JavaPlugin {
         }
 
         pm.registerEvents(new JobsChatEvent(getInstance()), getInstance());
+
+        // Register custom enchantment listeners
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.EnchantTableListener(getInstance()), getInstance());
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.EnchantmentEffectListener(getInstance()), getInstance());
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.EnchantRestrictionListener(getInstance()), getInstance());
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.EnchantmentRechargeListener(getInstance()), getInstance());
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.ElytraEnchantListener(getInstance()), getInstance());
+
+        // Universal listener for data-driven enchantments (trigger+effect system)
+        pm.registerEvents(new com.gamingmesh.jobs.enchantments.listener.UniversalEnchantmentListener(getInstance()), getInstance());
 
         JobsHook.PyroFishingPro.registerListener();
         JobsHook.mcMMO.registerListener();
@@ -977,6 +996,11 @@ public final class Jobs extends JavaPlugin {
         }
 
         BlockOwnerShip.onDisable();
+
+        // Disable custom enchantment system
+        if (enchantmentManager != null) {
+            enchantmentManager.disable();
+        }
 
         if (saveTask != null)
             saveTask.shutdown();

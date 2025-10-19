@@ -43,6 +43,9 @@ repositories {
 
     // BG Software
     maven("https://repo.bg-software.com/repository/api/")
+
+    // ProtocolLib
+    maven("https://repo.dmulloy2.net/repository/public/")
 }
 
 configurations.all {
@@ -123,6 +126,9 @@ dependencies {
 
     // CustomFishing
     compileOnly("net.momirealms:custom-fishing:2.3.4")
+
+    // ProtocolLib - for custom enchantment tooltips
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
 }
 
 tasks {
